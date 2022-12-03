@@ -26,7 +26,7 @@ public class Student {
     private int month;
     private int year;
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
-    private GroupName groupname;
+    private GroupName groupName;
 
     public Student() {
     }
@@ -79,19 +79,26 @@ public class Student {
         this.year = year;
     }
 
-
-    public GroupName getGroupname() {
-        return groupname;
+    public GroupName getGroupName() {
+        return groupName;
     }
 
-    public void setGroupname(GroupName groupname) {
-        this.groupname = groupname;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" + "id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", day=" + day + ", month=" + month + ", year=" + year + ", groupname=" + groupname + '}';
+    public void setGroupName(GroupName groupName) {
+        this.groupName = groupName;
     }
     
+    @Override
+    public String toString() {
+        return "Student{" 
+                + "id=" + id 
+                + ", firstname=" + firstname 
+                + ", lastname=" + lastname 
+                + ", day=" + day 
+                + ", month=" + month 
+                + ", year=" + year 
+                + ", groupname=" + groupName.getGname()
+                + '}';
+    }
+
     
 }

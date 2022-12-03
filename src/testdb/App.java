@@ -9,6 +9,7 @@ import entity.GroupName;
 import entity.Student;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.binding.Bindings;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -29,7 +30,8 @@ class App {
 
     public App() {
         try {
-            students = em.createQuery("SELECT s FROM Student s").getResultList();
+           students = em.createQuery("SELECT s FROM Student s").getResultList();
+           // student = (Student) em.createQuery("SELECT s FROM Student s").getSingleResult();
         } catch (Exception e) {
             System.out.println("Запись в базе данных отсутствует");
             students = new ArrayList<>();
@@ -40,38 +42,44 @@ class App {
     
     public void run(){
         tx.begin();
-        for (int i = 0; i < students.size(); i++) {
-            Student student = students.get(i);
-            if(student.getId() == null){
-     //           groupname.setGname("JKTV21");
-    //            groupname.setYear(2021);
-                //em.persist(groupName);
-                student.setFirstname("Ivan");
-                student.setLastname("Ivanov");
-                student.setDay(1);
-                student.setMonth(1);
-                student.setYear(2000);
-                student.setGroupname(new GroupName());
-                student.getGroupname().setGname("JKTV21");
-                student.getGroupname().setYear(2021);
-                em.persist(student);
+        
+        if(students.isEmpty()){
+ //       if(student.getId() == null){
+ //           groupname.setGname("JKTV21");
+//            groupname.setYear(2021);
+            //em.persist(groupName);
+            Student student = new Student();
+            student.setFirstname("Ivan");
+            student.setLastname("Ivanov");
+            student.setDay(1);
+            student.setMonth(1);
+            student.setYear(2000);
+            student.setGroupName(new GroupName());
+            student.getGroupName().setGname("JKTV21");
+            student.getGroupName().setYear(2021);
+            em.persist(student);
 
-                GroupName groupName = student.getGroupname();
-                student = new Student();
-                student.setFirstname("Peter");
-                student.setLastname("Tamme");
-                student.setDay(1);
-                student.setMonth(1);
-                student.setYear(2000);
-                student.setGroupname(groupName);
-               // student.getGroupname().setGname("JKTV22");
-                //student.getGroupname().setYear(2022);
-                em.persist(student);
+            GroupName groupName = student.getGroupName();
+            student = new Student();
+            student.setFirstname("Peter");
+            student.setLastname("Tamme");
+            student.setDay(1);
+            student.setMonth(1);
+            student.setYear(2000);
+            student.setGroupName(groupName);
+//            student.setGroupName(new GroupName());
+//            student.getGroupName().setGname("JKTV22");
+//            student.getGroupName().setYear(2022);
+            em.persist(student);
 
-            }else{
-                student.setFirstname("Zachar");
-                student.getGroupname().setGname("JKTV22");
-                student.getGroupname().setYear(2022);
+        }else{
+            for (int i = 0; i < students.size(); i++) {
+                Student student = students.get(i);
+                if (student.getFirstname().equals("Ivan") ){
+                    student.setFirstname("Zachar");
+                }
+                student.getGroupName().setGname("JKTV24");
+                student.getGroupName().setYear(2024);
                 em.merge(student);
             }
         }

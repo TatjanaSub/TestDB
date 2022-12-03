@@ -50,7 +50,11 @@ public class GroupName {
 
     @Override
     public String toString() {
-        return "GroupName{" + "id=" + id + ", gname=" + gname + ", year=" + year + '}';
+        return "GroupName{" 
+                + "id=" + id 
+                + ", gname=" + gname 
+                + ", year=" + year 
+                + '}';
     }
 
    
