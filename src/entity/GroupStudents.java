@@ -5,24 +5,26 @@
  */
 package entity;
 
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author pupil
  */
 @Entity
-public class GroupName {
+public class GroupStudents {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String gname;
-    private int year;
+    @OneToOne
+    private Student student;
+    @OneToOne
+    private GroupName group;
 
-    public GroupName() {
+    public GroupStudents() {
     }
 
     public Long getId() {
@@ -33,31 +35,30 @@ public class GroupName {
         this.id = id;
     }
 
-    public String getGname() {
-        return gname;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setGname(String gname) {
-        this.gname = gname;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public int getYear() {
-        return year;
+    public GroupName getGroup() {
+        return group;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setGroup(GroupName group) {
+        this.group = group;
     }
 
     @Override
     public String toString() {
-        return "GroupName{" 
+        return "GroupStudents{" 
                 + "id=" + id 
-                + ", gname=" + gname 
-                + ", year=" + year 
+                + ", student=" + student 
+                + ", group=" + group 
                 + '}';
     }
-
-   
+    
     
 }

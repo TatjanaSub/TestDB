@@ -6,10 +6,10 @@
 package testdb;
 
 import entity.GroupName;
+import entity.GroupStudents;
 import entity.Student;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.binding.Bindings;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -24,6 +24,7 @@ import javax.persistence.Persistence;
 class App {
     private List<Student> students;
     private List<GroupName> groupNames;
+    private List<GroupStudents> listGgroupStudents;
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("TestDBPU");
     private EntityManager em = emf.createEntityManager();
     private EntityTransaction tx = em.getTransaction();
@@ -31,11 +32,13 @@ class App {
     public App() {
         try {
            students = em.createQuery("SELECT s FROM Student s").getResultList();
-           // student = (Student) em.createQuery("SELECT s FROM Student s").getSingleResult();
+           groupNames = em.createQuery("SELECT gn FROM GroupName gn").getResultList();
+           listGgroupStudents = em.createQuery("SELECT gs FROM GroupStudents gs").getResultList();
         } catch (Exception e) {
             System.out.println("Запись в базе данных отсутствует");
             students = new ArrayList<>();
             groupNames = new ArrayList<>();
+            listGgroupStudents = new ArrayList<>();
         }
 
     }
@@ -44,45 +47,53 @@ class App {
         tx.begin();
         
         if(students.isEmpty()){
- //       if(student.getId() == null){
- //           groupname.setGname("JKTV21");
-//            groupname.setYear(2021);
-            //em.persist(groupName);
             Student student = new Student();
             student.setFirstname("Ivan");
             student.setLastname("Ivanov");
             student.setDay(1);
             student.setMonth(1);
             student.setYear(2000);
-            student.setGroupName(new GroupName());
-            student.getGroupName().setGname("JKTV21");
-            student.getGroupName().setYear(2021);
             em.persist(student);
+            
+            GroupName groupName = new GroupName();
+            groupName.setGname("JKTV21");
+            groupName.setYear(2021);
+            em.persist(groupName);
 
-            GroupName groupName = student.getGroupName();
+            GroupStudents groupStudents = new GroupStudents();
+            groupStudents.setStudent(student);
+            groupStudents.setGroup(groupName);
+            em.persist(groupStudents);
+            
             student = new Student();
             student.setFirstname("Peter");
             student.setLastname("Tamme");
             student.setDay(1);
             student.setMonth(1);
             student.setYear(2000);
-            student.setGroupName(groupName);
-//            student.setGroupName(new GroupName());
-//            student.getGroupName().setGname("JKTV22");
-//            student.getGroupName().setYear(2022);
             em.persist(student);
-
-        }else{
-            for (int i = 0; i < students.size(); i++) {
-                Student student = students.get(i);
-                if (student.getFirstname().equals("Ivan") ){
-                    student.setFirstname("Zachar");
-                }
-                student.getGroupName().setGname("JKTV24");
-                student.getGroupName().setYear(2024);
-                em.merge(student);
-            }
+            
+            groupName = new GroupName();
+            groupName.setGname("JKTV22");
+            groupName.setYear(2022);
+            em.persist(groupName);
+            
+            groupStudents = new GroupStudents();
+            groupStudents.setStudent(student);
+            groupStudents.setGroup(groupName);
+            em.persist(groupStudents);
         }
         tx.commit();
+        
+//        List<GroupStudents> groupStudents = em.createQuery("SELECT gs FROM GroupStudents gs WHERE gs.group.gname = 'JKTV21'").getResultList();
+        List<GroupStudents> groupStudents = em.createQuery("SELECT gs FROM GroupStudents gs").getResultList();
+        for (int i = 0; i < groupStudents.size(); i++) {
+            GroupStudents gs = groupStudents.get(i);
+            System.out.printf("Student: %s %s, group: %s %n"
+                    ,gs.getStudent().getFirstname()
+                    ,gs.getStudent().getLastname()
+                    ,gs.getGroup().getGname()
+            );
+        }
     }
 }
