@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -25,6 +26,8 @@ public class Student {
     private int day;
     private int month;
     private int year;
+    @OneToOne
+    private GroupName grup;
 
 
     public Student() {
@@ -90,6 +93,14 @@ public class Student {
                 + ", month=" + month 
                 + ", year=" + year 
                 + '}';
+    }
+
+    public GroupName getGrup() {
+        return grup;
+    }
+
+    public void setGrup(GroupName grup) {
+        this.grup = grup;
     }
 
     
